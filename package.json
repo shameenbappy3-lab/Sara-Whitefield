@@ -1,0 +1,22 @@
+{
+  "name": "sarah-whitfield-counseling",
+  "version": "1.0.0",
+  "description": "Sarah Whitfield Counseling - Licensed Therapist in Dallas, TX",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'No build step required for static site'",
+    "lint": "npx htmlhint index.html"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.1.1"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "counseling",
+    "therapy",
+    "dallas"
+  ],
+  "author": "Sarah Whitfield",
+  "license": "UNLICENSED"
+}
