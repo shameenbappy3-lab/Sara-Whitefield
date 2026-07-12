@@ -1,0 +1,1067 @@
+/* =============================================================================
+   SARAH WHITFIELD COUNSELING — STYLESHEET
+   =============================================================================
+   This file is organized in five parts. Search for these headers to jump
+   around:
+
+     1. DESIGN TOKENS   — the color scale, type scale, spacing scale, shadow
+                          scale, and radii. Change a value HERE and it updates
+                          everywhere the token is used. This is the whole
+                          point of tokens: one source of truth.
+     2. RESET & BASE    — sensible defaults, base typography, focus states.
+     3. LAYOUT UTILITIES — .container, .reveal (scroll-animation hook), etc.
+     4. COMPONENTS      — header, hero, cards, marquee, forms, footer, etc.
+     5. MEDIA QUERIES   — responsive tweaks, kept at the bottom on purpose so
+                          you can find every breakpoint override in one place
+                          instead of hunting through each component.
+
+   THREE REFACTORING-UI PRINCIPLES ARE APPLIED ON PURPOSE THROUGHOUT THIS
+   FILE. Whenever you see a comment starting with "HIERARCHY:", it's flagging
+   one of these three:
+
+     - COLOR HIERARCHY:  we do NOT use black/gray/white for text. Every
+       neutral is tinted with a hint of the brand hue (see --ink, --paper
+       below) so the whole page feels like one coherent "material" instead of
+       a generic Bootstrap-gray page with a color slapped on top. Saturation
+       and lightness — not just hue — carry meaning: darker + more saturated
+       = more important.
+     - SHADOW HIERARCHY: shadows aren't decoration, they represent physical
+       elevation. Resting cards get a small shadow. On hover (an interactive
+       state) they get a bigger one, as if they lifted off the page. The
+       floating call button — the single most "always available" element on
+       the page — gets the biggest shadow of all, permanently.
+     - SIZE HIERARCHY: the type scale below has DELIBERATELY uneven jumps
+       (16 -> 18 -> 22 -> 28 -> 36 -> 48 -> 60), not a lazy +2px each step.
+       Small differences are hard to notice and don't communicate hierarchy;
+       big jumps do. We also lean on font-WEIGHT and COLOR to create
+       hierarchy so we're not just making everything either huge or bold.
+============================================================================= */
+
+
+/* =============================================================================
+   1. DESIGN TOKENS
+============================================================================= */
+:root {
+
+  /* ---------------------------------------------------------------------
+     COLOR — SAGE (primary brand hue, ~152°, a muted teal-green)
+     Built in HSL on purpose: to make a tint or shade, you only ever move
+     ONE number (lightness), which is exactly what Refactoring UI recommends
+     instead of eyeballing random hex codes for every new shade you need.
+     --------------------------------------------------------------------- */
+  --sage-50:  hsl(152, 35%, 96%);
+  --sage-100: hsl(152, 32%, 91%);
+  --sage-200: hsl(152, 30%, 82%);
+  --sage-300: hsl(152, 28%, 70%);
+  --sage-400: hsl(152, 26%, 56%);
+  --sage-500: hsl(152, 30%, 44%);   /* primary brand color: buttons, links   */
+  --sage-600: hsl(152, 34%, 36%);   /* hover / pressed state for the above   */
+  --sage-700: hsl(152, 38%, 28%);
+  --sage-800: hsl(154, 40%, 20%);
+  --sage-900: hsl(156, 44%, 12%);   /* darkest — headings, footer, nav text  */
+
+  /* COLOR — GOLD (secondary accent, ~36°, warm honey — used SPARINGLY:
+     star ratings, the odd underline/highlight. Never a button background.
+     A little accent goes a long way; two loud colors would fight for
+     attention and cancel each other out. */
+  --gold-100: hsl(38, 55%, 90%);
+  --gold-300: hsl(38, 50%, 74%);
+  --gold-500: hsl(36, 48%, 56%);
+  --gold-600: hsl(34, 52%, 44%);
+
+  /* COLOR — NEUTRALS, tinted with the sage hue instead of true gray.
+     HIERARCHY: this is the color-hierarchy principle in its simplest form —
+     even "gray" text on this site is quietly green-gray, which is why the
+     whole palette feels unified instead of "brand color + Bootstrap gray". */
+  --paper:      hsl(150, 20%, 98%);  /* page background                     */
+  --paper-alt:  hsl(150, 16%, 95%);  /* alternating section / card bg       */
+  --line:       hsl(150, 14%, 88%);  /* borders, dividers                   */
+  --ink:        hsl(160, 20%, 13%);  /* primary text — near-black, not flat */
+  --ink-soft:   hsl(150, 10%, 40%);  /* secondary / muted text              */
+  --ink-faint:  hsl(150, 8%,  58%);  /* placeholder text, fine print        */
+
+  /* Semantic aliases. Components below reference THESE, not the raw scale
+     above — so if you rebrand later, you edit the six lines above and every
+     component updates automatically. */
+  --color-bg:        var(--paper);
+  --color-bg-alt:     var(--paper-alt);
+  --color-text:      var(--ink);
+  --color-text-soft: var(--ink-soft);
+  --color-border:    var(--line);
+  --color-brand:     var(--sage-500);
+  --color-brand-hover: var(--sage-600);
+  --color-brand-dark: var(--sage-900);
+  /* Using gold-600 (not gold-500) here on purpose: this token gets used for
+     small text (specialty tags, star ratings) on light backgrounds, and the
+     darker step keeps that text at a safe contrast ratio against white. */
+  --color-accent:    var(--gold-600);
+
+  /* ---------------------------------------------------------------------
+     TYPE — three font ROLES, loaded in index.html
+     --------------------------------------------------------------------- */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Work Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* TYPE SCALE — HIERARCHY: notice the jumps get BIGGER as sizes go up
+     (12->14->16->18->22->28->36->48->60). That's intentional: a 2px
+     difference matters a lot at small sizes and barely registers at large
+     ones, so the scale isn't linear, it's closer to logarithmic. */
+  --text-xs:   0.75rem;    /* 12px — mono tags, fine print, form hints      */
+  --text-sm:   0.875rem;   /* 14px — nav links, small labels                */
+  --text-base: 1rem;       /* 16px — body copy                              */
+  --text-md:   1.125rem;   /* 18px — lead paragraphs                        */
+  --text-lg:   1.375rem;   /* 22px — card titles, testimonial quotes        */
+  --text-xl:   1.75rem;    /* 28px — sub-headings                           */
+  --text-2xl:  2.25rem;    /* 36px — section headings (h2)                  */
+  --text-3xl:  3rem;       /* 48px — hero headline, mobile                  */
+  --text-4xl:  3.75rem;    /* 60px — hero headline, desktop                 */
+
+  /* ---------------------------------------------------------------------
+     SPACING — a ~4px grid. Using tokens instead of ad-hoc margins keeps
+     vertical rhythm consistent across every section.
+     --------------------------------------------------------------------- */
+  --space-1: 0.25rem;  /* 4px  */
+  --space-2: 0.5rem;   /* 8px  */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.5rem;   /* 24px */
+  --space-6: 2rem;     /* 32px */
+  --space-7: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+  --space-9: 6rem;     /* 96px */
+  --space-10: 8rem;    /* 128px */
+
+  /* ---------------------------------------------------------------------
+     SHADOWS — HIERARCHY: five steps, resting -> floating. Every shadow
+     uses the brand-dark color at low opacity instead of flat black, which
+     is a small trick that makes shadows feel like they belong to this
+     specific palette instead of a generic drop-shadow.
+     --------------------------------------------------------------------- */
+  --shadow-xs: 0 1px 2px hsla(156, 44%, 8%, 0.06);
+  --shadow-sm: 0 2px 6px hsla(156, 44%, 8%, 0.08), 0 1px 2px hsla(156, 44%, 8%, 0.05);
+  --shadow-md: 0 10px 24px hsla(156, 44%, 8%, 0.12), 0 2px 6px hsla(156, 44%, 8%, 0.06);
+  --shadow-lg: 0 18px 40px hsla(156, 44%, 8%, 0.16), 0 4px 10px hsla(156, 44%, 8%, 0.08);
+  --shadow-xl: 0 26px 60px hsla(156, 44%, 8%, 0.24), 0 8px 16px hsla(156, 44%, 8%, 0.10);
+
+  /* ---------------------------------------------------------------------
+     RADII — soft, organic corners everywhere (no sharp 0px corners on
+     purpose — it matches the "human, not corporate" direction).
+     --------------------------------------------------------------------- */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-full: 999px;
+
+  /* Misc */
+  --header-height: 76px;
+  --marquee-duration: 42s;   /* <-- change ONLY this to speed up/slow the marquee */
+  --transition-fast: 160ms ease;
+  --transition-base: 260ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* =============================================================================
+   2. RESET & BASE
+============================================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  color: var(--color-brand-dark);
+}
+h1 em, h2 em, h3 em { font-style: italic; color: var(--color-brand); }
+
+p { margin: 0 0 var(--space-4); }
+p:last-child { margin-bottom: 0; }
+
+a { color: var(--color-brand); text-decoration: none; }
+
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+button { font-family: inherit; cursor: pointer; }
+
+/* Visible keyboard focus everywhere — quality floor, not optional. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Skip link: invisible until focused (keyboard users tabbing from the URL bar) */
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: -60px;
+  background: var(--color-brand-dark);
+  color: white;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-sm);
+  z-index: 1000;
+  transition: top var(--transition-fast);
+}
+.skip-link:focus { top: var(--space-4); }
+
+/* Respect the user's OS-level motion preference. This turns off the marquee
+   scroll, the scroll-reveal animation, and the call-button pulse — see the
+   specific overrides throughout the file too, this is the "master switch". */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+
+/* =============================================================================
+   3. LAYOUT UTILITIES
+============================================================================= */
+.container {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-brand);
+  margin: 0 0 var(--space-3);
+  font-weight: 500;
+}
+
+.section-heading { max-width: 640px; margin: 0 0 var(--space-8); }
+.section-heading h2 { margin-bottom: var(--space-3); }
+.section-lead { color: var(--color-text-soft); font-size: var(--text-md); }
+.section-heading--on-dark h2,
+.section-heading--on-dark .section-lead { color: white; }
+.section-heading--on-dark .eyebrow { color: var(--gold-300); }
+
+/* ---------------------------------------------------------------------
+   SCROLL-REVEAL ANIMATION
+   Elements start slightly translated + transparent. script.js uses an
+   IntersectionObserver to add `.is-visible` the first time each element
+   scrolls into view (see script.js for the full explanation). This is a
+   ONE-TIME reveal, not a repeating effect — it should feel like the page
+   is gently introducing itself, not distract on every scroll bounce.
+--------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Stagger children slightly inside grids for a nicer cascade effect */
+.specialty-grid .reveal:nth-child(2) { transition-delay: 80ms; }
+.specialty-grid .reveal:nth-child(3) { transition-delay: 160ms; }
+.specialty-grid .reveal:nth-child(4) { transition-delay: 240ms; }
+.specialty-grid .reveal:nth-child(5) { transition-delay: 320ms; }
+
+
+/* =============================================================================
+   4. COMPONENTS
+============================================================================= */
+
+/* -----------------------------------------------------------------------
+   BUTTONS
+   Two variants only (primary / ghost) — HIERARCHY: a page with five button
+   styles has no hierarchy at all. Primary = the one action we want most
+   people to take. Ghost = everything else.
+----------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--text-base);
+  border: 1.5px solid transparent;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--color-brand);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover {
+  background: var(--color-brand-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--color-brand-dark);
+  border-color: var(--color-border);
+}
+.btn-ghost:hover {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+.btn-block { width: 100%; }
+
+/* -----------------------------------------------------------------------
+   HEADER / NAV
+----------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: hsla(150, 20%, 98%, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+}
+/* .is-scrolled is toggled by script.js once the page scrolls past the hero.
+   HIERARCHY (shadow): a flat page gets a flat header; once there's content
+   "under" it, the header earns a shadow, exactly like a physical surface
+   floating above the page. */
+.site-header.is-scrolled {
+  box-shadow: var(--shadow-sm);
+  border-bottom-color: var(--color-border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--color-brand-dark);
+  letter-spacing: -0.01em;
+}
+.logo-suffix {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+.main-nav a {
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+.main-nav a:hover { color: var(--color-brand); }
+.main-nav .nav-cta {
+  background: var(--color-brand);
+  color: white;
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-full);
+}
+.main-nav .nav-cta:hover { background: var(--color-brand-hover); }
+
+/* Hamburger — hidden on desktop, shown at the mobile breakpoint below */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: var(--space-2);
+}
+.nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: var(--color-brand-dark);
+  border-radius: var(--radius-full);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+/* .is-open is toggled by script.js */
+.nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+
+/* -----------------------------------------------------------------------
+   HERO
+----------------------------------------------------------------------- */
+.hero { padding: var(--space-9) 0 var(--space-8); }
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-8);
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: var(--text-4xl);
+  letter-spacing: -0.02em;
+  max-width: 14ch;
+}
+.hero-lead {
+  font-size: var(--text-md);
+  color: var(--color-text-soft);
+  max-width: 46ch;
+  margin-bottom: var(--space-6);
+}
+.hero-actions {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-6);
+}
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-soft);
+}
+.hero-trust li::before { content: '— '; color: var(--color-brand); }
+
+.hero-visual { position: relative; }
+
+/* THE SIGNATURE ELEMENT: an organic "blob" frame around the portrait.
+   It's just an asymmetric border-radius — no image editing, no SVG mask,
+   no clip-path needed. Want a different blob shape? Change these four
+   percentages (they're read as: top-left top-right bottom-right bottom-left
+   for the horizontal radii, then the same order again for vertical). */
+.blob-frame {
+  border-radius: 62% 38% 55% 45% / 55% 45% 65% 35%;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 5 / 6;
+  /* Slow, subtle "breathing" morph — very low-key ambient motion.
+     Disabled entirely under prefers-reduced-motion (see the master switch
+     above), so nobody who's opted out of motion ever sees it. */
+  animation: blob-morph 14s ease-in-out infinite;
+}
+.blob-frame img { width: 100%; height: 100%; object-fit: cover; }
+@keyframes blob-morph {
+  0%, 100% { border-radius: 62% 38% 55% 45% / 55% 45% 65% 35%; }
+  50%      { border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%; }
+}
+
+/* Floating credential card — HIERARCHY (shadow): this sits visually
+   "above" the portrait, so its shadow is a step bigger, reinforcing that
+   it's a separate, elevated surface. */
+.floating-card {
+  position: absolute;
+  bottom: -14px;
+  left: -14px;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.floating-card-number {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: var(--color-brand);
+  line-height: 1;
+}
+.floating-card-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-soft);
+  max-width: 9ch;
+  line-height: 1.3;
+}
+
+/* -----------------------------------------------------------------------
+   TRUST BAR
+----------------------------------------------------------------------- */
+.trust-bar { border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); }
+.trust-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-soft);
+  text-align: center;
+}
+.trust-dot { color: var(--color-accent); }
+
+/* -----------------------------------------------------------------------
+   ABOUT
+----------------------------------------------------------------------- */
+.about { padding: var(--space-9) 0; }
+.about-inner {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: var(--space-8);
+  align-items: center;
+}
+.about-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.about-copy p { color: var(--color-text-soft); }
+.credential-list {
+  margin-top: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+}
+.credential-list li {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  padding-left: var(--space-5);
+  position: relative;
+}
+.credential-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-brand);
+}
+
+/* -----------------------------------------------------------------------
+   SPECIALTIES
+----------------------------------------------------------------------- */
+.specialties { padding: var(--space-9) 0; background: var(--color-bg-alt); }
+.specialty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+/* HIERARCHY (shadow): resting = shadow-sm, hover = shadow-md + lift.
+   The card behaves like a physical card being picked up off a table. */
+.specialty-card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.specialty-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+}
+.specialty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--sage-100);
+  color: var(--color-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+}
+.specialty-icon svg { width: 24px; height: 24px; }
+.specialty-tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-accent);
+  margin-bottom: var(--space-1);
+}
+.specialty-card h3 { font-size: var(--text-lg); margin-bottom: var(--space-2); }
+.specialty-card p { color: var(--color-text-soft); font-size: var(--text-sm); margin: 0; }
+
+/* -----------------------------------------------------------------------
+   APPROACH (full-bleed photo background + overlay)
+----------------------------------------------------------------------- */
+.approach {
+  position: relative;
+  padding: var(--space-9) 0;
+  overflow: hidden;
+  isolation: isolate; /* keeps z-index below scoped to this section */
+}
+.approach-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.approach-bg img { width: 100%; height: 100%; object-fit: cover; }
+/* Dark sage overlay so white text always has enough contrast, regardless
+   of which part of the photo sits behind any given line of text. */
+.approach-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, hsla(156, 50%, 10%, 0.82), hsla(156, 50%, 8%, 0.9));
+}
+.approach-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+.approach-step {
+  background: hsla(0, 0%, 100%, 0.08);
+  border: 1px solid hsla(0, 0%, 100%, 0.16);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  color: white;
+}
+.approach-step-number {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--gold-300);
+  display: block;
+  margin-bottom: var(--space-3);
+}
+.approach-step h3 { color: white; font-size: var(--text-lg); margin-bottom: var(--space-2); }
+.approach-step p { color: hsla(0, 0%, 100%, 0.78); font-size: var(--text-sm); margin: 0; }
+
+/* -----------------------------------------------------------------------
+   TESTIMONIALS — INFINITE MARQUEE
+   See the long comment in index.html for how the "doubled track" trick
+   works. Everything below is just the visual + the two animation states.
+----------------------------------------------------------------------- */
+.testimonials { padding: var(--space-9) 0; }
+.testimonials .container { margin-bottom: var(--space-7); }
+
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  /* Fade the edges so cards don't look like they're cut off mid-card —
+     a small detail that makes the infinite loop feel intentional. */
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  gap: var(--space-5);
+  width: max-content;
+  padding-inline: var(--space-5);
+  animation: marquee-scroll var(--marquee-duration) linear infinite;
+}
+/* Pausing on hover OR keyboard focus (so keyboard users tabbing through the
+   quotes aren't fighting a moving target) */
+.marquee-track:hover,
+.marquee-track:focus-within {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  /* Exactly -50% because script.js duplicates the track once (2x the
+     content) — moving half the total width lines the clone up perfectly
+     with where the original started, so the loop is invisible. */
+  to   { transform: translateX(-50%); }
+}
+
+.testimonial-card {
+  flex: 0 0 340px;
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  margin: 0;
+}
+.testimonial-card .stars {
+  color: var(--color-accent);
+  font-size: var(--text-sm);
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-3);
+}
+.testimonial-card p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-md);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+.testimonial-card footer {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-brand-dark);
+}
+.testimonial-card footer span { font-weight: 400; color: var(--color-text-soft); }
+
+/* -----------------------------------------------------------------------
+   FAQ
+----------------------------------------------------------------------- */
+.faq { padding: var(--space-9) 0; background: var(--color-bg-alt); }
+.faq-inner { max-width: 760px; }
+.faq-list { display: grid; gap: var(--space-3); }
+.faq-item {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  box-shadow: var(--shadow-xs);
+}
+.faq-item summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: var(--text-md);
+  color: var(--color-brand-dark);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+/* Plus/minus indicator drawn with CSS instead of an icon font or image */
+.faq-item summary::after {
+  content: '+';
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  color: var(--color-brand);
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: var(--space-4);
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item p { margin-top: var(--space-4); color: var(--color-text-soft); }
+
+/* -----------------------------------------------------------------------
+   CONTACT
+----------------------------------------------------------------------- */
+.contact { padding: var(--space-9) 0; }
+.contact-inner {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+.contact-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  margin: var(--space-6) 0;
+}
+.contact-details dt {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+  margin-bottom: var(--space-1);
+}
+.contact-details dd { margin: 0; font-size: var(--text-sm); }
+
+.map-placeholder {
+  height: 160px;
+  border-radius: var(--radius-md);
+  background:
+    repeating-linear-gradient(45deg, var(--sage-100), var(--sage-100) 10px, var(--sage-50) 10px, var(--sage-50) 20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+  text-align: center;
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.crisis-note {
+  background: var(--gold-100);
+  border: 1px solid var(--gold-300);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+.crisis-note a { font-weight: 600; }
+
+/* Form */
+.contact-form-wrap { position: relative; }
+.contact-form {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--space-7);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  gap: var(--space-5);
+}
+.form-row { display: grid; gap: var(--space-2); }
+.form-row--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+.form-row label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-brand-dark);
+}
+.optional-tag { font-weight: 400; color: var(--color-text-soft); }
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+  font: inherit;
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--color-text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px hsla(152, 30%, 44%, 0.15);
+  outline: none; /* the box-shadow above IS the focus ring here */
+}
+.form-row textarea { resize: vertical; min-height: 120px; }
+.form-fineprint { font-size: var(--text-xs); color: var(--color-text-soft); margin: 0; }
+
+/* Success panel. script.js hides the <form> (via the `hidden` attribute)
+   and un-hides this panel in its place — since only one of the two is ever
+   in the document flow at a time, there's no layout overlap to manage. See
+   script.js for the .is-visible / .static-success toggle that controls
+   whether this fades + draws in, or just appears instantly. */
+.form-success {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-7);
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+  /* Starts faded/shifted down; `.is-visible` (animated path) or
+     `.static-success` (instant path, see below) both bring it to its
+     final resting state — they just take different routes to get there. */
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  transition: opacity 420ms ease, transform 420ms ease;
+}
+.form-success.is-visible { opacity: 1; transform: translateY(0) scale(1); }
+.form-success h3 { font-size: var(--text-xl); }
+.form-success p { color: var(--color-text-soft); margin-bottom: var(--space-6); }
+
+/* DEMO_ANIMATION = false path (see script.js): jumps straight to the final
+   state with `transition: none`, so nothing fades, slides, or draws — the
+   panel and the checkmark simply appear already-finished. This class is
+   never combined with `.is-visible`, so it can never accidentally inherit
+   the animated rules above. */
+.form-success.static-success {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+.form-success.static-success .success-check-circle,
+.form-success.static-success .success-check-mark {
+  stroke-dashoffset: 0;
+  animation: none;
+}
+
+/* The animated checkmark. Both the circle and the check mark are drawn
+   with stroke-dasharray/stroke-dashoffset "line drawing" animations —
+   classic SVG technique, no external icon library needed. */
+.success-check {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-5);
+  display: block;
+}
+.success-check-circle {
+  stroke: var(--color-brand);
+  stroke-width: 2.5;
+  stroke-dasharray: 151;   /* ≈ circumference of r=24 circle (2 * π * 24) */
+  stroke-dashoffset: 151;
+}
+.success-check-mark {
+  stroke: var(--color-brand);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 34;
+  stroke-dashoffset: 34;
+}
+/* These two classes are added by script.js ONLY when DEMO_ANIMATION is
+   true. When false, the checkmark just appears fully drawn (dashoffset 0
+   set directly, no keyframes) — see script.js. */
+.form-success.is-visible .success-check-circle { animation: draw-circle 500ms ease forwards; }
+.form-success.is-visible .success-check-mark { animation: draw-check 300ms 450ms ease forwards; }
+@keyframes draw-circle { to { stroke-dashoffset: 0; } }
+@keyframes draw-check  { to { stroke-dashoffset: 0; } }
+
+
+/* -----------------------------------------------------------------------
+   FOOTER
+----------------------------------------------------------------------- */
+.site-footer { background: var(--color-brand-dark); color: hsla(0, 0%, 100%, 0.85); padding: var(--space-8) 0 var(--space-6); }
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.12);
+  margin-bottom: var(--space-5);
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: white;
+  margin: 0;
+}
+.footer-logo span { color: var(--gold-300); }
+.footer-tagline { font-size: var(--text-sm); color: hsla(0, 0%, 100%, 0.65); margin-top: var(--space-2); }
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  align-self: start;
+  justify-self: end;
+}
+.footer-links a { color: hsla(0, 0%, 100%, 0.8); font-size: var(--text-sm); }
+.footer-links a:hover { color: white; }
+.footer-legal { grid-column: 1 / -1; font-size: var(--text-xs); color: hsla(0, 0%, 100%, 0.55); display: grid; gap: var(--space-2); }
+.footer-legal p { margin: 0; }
+
+
+/* -----------------------------------------------------------------------
+   FLOATING CALL BUTTON
+   HIERARCHY (shadow): the biggest shadow token on the page (--shadow-xl on
+   hover, --shadow-lg at rest) belongs here, because this button is meant to
+   feel like it's floating a full level above everything else — it's always
+   available, on every section, at every scroll position.
+----------------------------------------------------------------------- */
+.floating-call {
+  position: fixed;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--color-brand);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  z-index: 200;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+.floating-call:hover {
+  background: var(--color-brand-hover);
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-3px) scale(1.04);
+}
+.floating-call svg { width: 26px; height: 26px; position: relative; z-index: 1; }
+
+/* The pulsing ring: an absolutely-positioned pseudo-sized element that
+   scales up and fades out on a loop, sitting BEHIND the button (z-index
+   handled via the svg's z-index:1 above + this element being a sibling,
+   not a pseudo-element, so it can have its own independent size). */
+.floating-call-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--color-brand);
+  animation: call-pulse 2.6s ease-out infinite;
+  z-index: 0;
+}
+@keyframes call-pulse {
+  0%   { transform: scale(1);   opacity: 0.55; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+/* Reduced motion: kill the pulse but keep the button fully functional and
+   visible — this is handled by the global master switch at the top of the
+   file too, this rule is just belt-and-suspenders for this one element. */
+@media (prefers-reduced-motion: reduce) {
+  .floating-call-pulse { display: none; }
+}
+
+
+/* =============================================================================
+   5. MEDIA QUERIES
+   Breakpoints: 960px (tablet) and 640px (mobile). Mobile-first purists
+   would write min-width up; this file uses max-width "cut here" queries
+   instead since the desktop layout was designed first — either approach is
+   fine, just stay consistent within one file.
+============================================================================= */
+
+@media (max-width: 960px) {
+  .hero-inner,
+  .about-inner,
+  .contact-inner { grid-template-columns: 1fr; }
+  .about-visual { order: -1; }
+  .specialty-grid { grid-template-columns: repeat(2, 1fr); }
+  .approach-steps { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-links { justify-self: start; }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --text-4xl: 2.5rem;
+    --text-3xl: 2.1rem;
+    --text-2xl: 1.75rem;
+    --space-9: 4rem;
+    --space-8: 3rem;
+  }
+
+  /* Mobile nav: full-width dropdown panel under the sticky header */
+  .main-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-bg);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    /* Hidden by default; script.js toggles `.is-open` */
+    display: none;
+  }
+  .main-nav.is-open { display: flex; }
+  .main-nav a { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border); }
+  .main-nav a:last-child { border-bottom: none; }
+  .main-nav .nav-cta { margin-top: var(--space-3); text-align: center; }
+  .nav-toggle { display: flex; }
+
+  .specialty-grid { grid-template-columns: 1fr; }
+  .form-row--split { grid-template-columns: 1fr; }
+  .contact-details { grid-template-columns: 1fr; }
+  .testimonial-card { flex-basis: 280px; }
+
+  .floating-call { width: 52px; height: 52px; right: var(--space-4); bottom: var(--space-4); }
+  .floating-call svg { width: 22px; height: 22px; }
+}

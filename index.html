@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sarah Whitfield Counseling | Licensed Therapist in Dallas, TX</title>
+  <meta name="description" content="Sarah Whitfield, LPC-S — a solo counseling practice in Dallas, TX helping adults, teens, and children with OCD, anxiety, depression, and child therapy. Free 15-minute consultation.">
+
+  <!-- Basic Open Graph tags. Swap og:image for a real hosted photo when this goes live. -->
+  <meta property="og:title" content="Sarah Whitfield Counseling | Dallas, TX">
+  <meta property="og:description" content="Individual therapy for OCD, anxiety, depression, and child & teen support in Dallas, TX.">
+  <meta property="og:type" content="website">
+
+  <!--
+    ===========================================================================
+    FONTS
+    ===========================================================================
+    Three typefaces, three jobs (this is intentional, not decoration):
+      - Fraunces    -> the "voice" of the practice. Used ONLY for headings.
+                       It's a soft-contrast serif, warm rather than clinical.
+      - Work Sans   -> the workhorse. All body copy, nav, buttons, labels.
+      - JetBrains Mono -> small "clinical precision" accents: the eyebrow tags
+                       above headings, the specialty chips, credential codes.
+                       This mixing of a warm serif with a precise mono face is
+                       meant to mirror the practice itself: warmth + rigor.
+    Swap these on Google Fonts if you want a different personality, just keep
+    the same three ROLES (display / body / mono) so the hierarchy still reads.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <!-- Tiny inline SVG favicon (a sage leaf-dot) so the tab doesn't look unfinished. Replace freely. -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23335144'/%3E%3Cpath d='M16 24V13' stroke='%23F3F6F2' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M16 17c-5 0-7-3-7-7 5 0 7 2.5 7 7Z' fill='%23F3F6F2'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       SKIP LINK — keyboard/screen-reader users can jump past the nav.
+       Visually hidden until it receives focus (styled in styles.css).
+  =========================================================================== -->
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- ==========================================================================
+       HEADER / NAVIGATION
+       Sticky on scroll. JS toggles a `.is-scrolled` class (adds a shadow, see
+       styles.css) after the page scrolls past the hero, and a `.is-open` class
+       on the nav for the mobile hamburger menu.
+  =========================================================================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+
+      <a href="#top" class="logo">
+        Sarah Whitfield
+        <span class="logo-suffix">Counseling</span>
+      </a>
+
+      <!-- Main nav. aria-expanded / aria-controls are kept in sync by script.js -->
+      <nav class="main-nav" id="mainNav" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#specialties">Specialties</a>
+        <a href="#approach">Approach</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact" class="nav-cta">Contact</a>
+      </nav>
+
+      <!-- Hamburger button, mobile only (hidden on desktop via CSS) -->
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="mainNav"
+        type="button"
+      >
+        <span></span><span></span><span></span>
+      </button>
+
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ========================================================================
+         HERO
+         Two-column layout: copy on the left, portrait in an organic "blob"
+         frame on the right. The blob shape is pure CSS (border-radius trick,
+         see .blob-frame in styles.css) — no image editing needed, and it's
+         one line to change if you want a different shape.
+    ========================================================================= -->
+    <section class="hero" id="top">
+      <div class="container hero-inner">
+
+        <div class="hero-copy reveal">
+          <p class="eyebrow">Licensed Professional Counselor &middot; Dallas, TX</p>
+
+          <h1>
+            Hi, I&rsquo;m Sarah.<br>
+            Therapy that meets you <em>where you are</em>.
+          </h1>
+
+          <p class="hero-lead">
+            I work with adults, teens, and children facing OCD, anxiety,
+            depression, and the harder chapters of growing up &mdash; in a
+            practice built for one person at a time: you.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary">Book a free consultation</a>
+            <a href="tel:+12145550142" class="btn btn-ghost">Call (214) 555-0142</a>
+          </div>
+
+          <ul class="hero-trust">
+            <li>9 years in practice</li>
+            <li>ERP-trained for OCD</li>
+            <li>Telehealth across Texas</li>
+          </ul>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="blob-frame">
+            <!--
+              IMAGE SOURCE: Unsplash (free to use, no attribution required).
+              Swap the src for Sarah's real headshot when this goes to a client —
+              keep the aspect ratio roughly square/portrait for the blob mask to
+              look right.
+            -->
+            <img
+              src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=900&auto=format&fit=crop"
+              alt="Portrait of Sarah Whitfield, LPC-S, smiling"
+              width="900" height="1080"
+              loading="eager"
+            >
+          </div>
+
+          <!-- Floating credential card, overlapping the blob. This is a direct
+               use of the shadow-hierarchy principle: it sits ABOVE the portrait
+               so it gets the biggest shadow on the page after the call button. -->
+          <div class="floating-card">
+            <span class="floating-card-number">9+</span>
+            <span class="floating-card-label">years in&nbsp;practice</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         TRUST BAR
+         A quiet strip of plain-text credentials under the hero. No fake
+         institution logos — just facts, scannable in two seconds.
+    ========================================================================= -->
+    <section class="trust-bar" aria-label="Credentials">
+      <div class="container trust-bar-inner">
+        <span>LPC-S &middot; Licensed in Texas</span>
+        <span class="trust-dot" aria-hidden="true">&bull;</span>
+        <span>EMDR &amp; ERP Trained</span>
+        <span class="trust-dot" aria-hidden="true">&bull;</span>
+        <span>Telehealth Statewide</span>
+        <span class="trust-dot" aria-hidden="true">&bull;</span>
+        <span>Ages 6 and up</span>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         ABOUT
+         Photo + bio in a two-column layout. Mirrors the hero's asymmetry but
+         flipped (image on the LEFT here) so the page doesn't feel like the
+         same template repeated — a small, deliberate rhythm change.
+    ========================================================================= -->
+    <section class="about" id="about">
+      <div class="container about-inner">
+
+        <div class="about-visual reveal">
+          <!-- <img
+            src="https://images.unsplash.com/photo-1637245048732-adf1a547835e?q=80&w=1000&auto=format&fit=crop"  
+            alt="A calm, plant-filled counseling room with two armchairs by a window"
+            width="1000" height="1250"
+            loading="lazy"
+          > -->
+
+          <img
+            src="images/patrick-perkins-3wylDrjxH-E-unsplash.jpg"  
+            alt="A calm, plant-filled counseling room with two armchairs by a window"
+            width="1000" height="1250"
+            loading="lazy"
+          >
+        </div>
+
+        <div class="about-copy reveal">
+          <p class="eyebrow">About Sarah</p>
+          <h2>A practice built around one relationship at a time.</h2>
+
+          <p>
+            I&rsquo;m Sarah Whitfield, a Licensed Professional Counselor (LPC-S)
+            with a solo practice in Dallas. For the past nine years I&rsquo;ve
+            worked with adults, teens, and children carrying OCD, anxiety,
+            depression, and the everyday weight of hard seasons.
+          </p>
+
+          <p>
+            My approach blends Exposure and Response Prevention (ERP) for OCD
+            and anxiety, cognitive-behavioral therapy, and &mdash; with younger
+            clients &mdash; play-based and expressive techniques that meet kids
+            where language runs out.
+          </p>
+
+          <p>
+            Because it&rsquo;s just me, there&rsquo;s no hand-off between an
+            intake coordinator and a rotating cast of clinicians. You&rsquo;ll
+            work with the same person who read your first message, from the
+            free consultation call through however long we work together.
+          </p>
+
+          <ul class="credential-list">
+            <li>Licensed Professional Counselor &ndash; Supervisor (LPC-S), Texas</li>
+            <li>Certified in Exposure and Response Prevention (ERP) for OCD</li>
+            <li>Trained in child-centered play therapy</li>
+            <li>9 years in private practice; formerly with a Dallas community counseling center</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SPECIALTIES
+         Card grid. Each card = icon + mono "tag" (modality) + serif title +
+         one-line description. The mono tag is the signature detail carried
+         over from the hero/eyebrow styling — it's doing double duty as both
+         a visual accent and useful information (which method is used).
+    ========================================================================= -->
+    <section class="specialties" id="specialties">
+      <div class="container">
+
+        <div class="section-heading reveal">
+          <p class="eyebrow">Areas of focus</p>
+          <h2>Where I can help</h2>
+          <p class="section-lead">
+            A solo practice means I can&rsquo;t be everything to everyone
+            &mdash; so I&rsquo;ve focused my training on the areas where I do
+            my best work.
+          </p>
+        </div>
+
+        <div class="specialty-grid">
+
+          <!-- Card 1: OCD -->
+          <article class="specialty-card reveal">
+            <div class="specialty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 12a8 8 0 0 1 14.5-4.5"/>
+                <path d="M20 4v4h-4"/>
+                <path d="M20 12a8 8 0 0 1-14.5 4.5"/>
+                <path d="M4 20v-4h4"/>
+              </svg>
+            </div>
+            <p class="specialty-tag">ERP-based</p>
+            <h3>OCD &amp; Intrusive Thoughts</h3>
+            <p>Structured exposure and response prevention for the loops that logic alone can&rsquo;t seem to break.</p>
+          </article>
+
+          <!-- Card 2: Anxiety -->
+          <article class="specialty-card reveal">
+            <div class="specialty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12h4l2-6 3 12 2-8 2 4h5"/>
+              </svg>
+            </div>
+            <p class="specialty-tag">CBT</p>
+            <h3>Anxiety Disorders</h3>
+            <p>Generalized anxiety, panic, and the specific fears that have started running the show.</p>
+          </article>
+
+          <!-- Card 3: Depression -->
+          <article class="specialty-card reveal">
+            <div class="specialty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="17" r="4"/>
+                <path d="M12 3v2M4.2 9.2l1.4 1.4M19.8 9.2l-1.4 1.4M2 17h2M20 17h2"/>
+              </svg>
+            </div>
+            <p class="specialty-tag">CBT &middot; Behavioral</p>
+            <h3>Depression &amp; Mood</h3>
+            <p>For the flatness, the fatigue, and the days that feel harder to start than they should.</p>
+          </article>
+
+          <!-- Card 4: Child therapy -->
+          <article class="specialty-card reveal">
+            <div class="specialty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 21v-8"/>
+                <path d="M12 13c-4 0-6-2.5-6-6 4 0 6 2 6 6Z"/>
+                <path d="M12 13c4 0 6-2.5 6-6-4 0-6 2-6 6Z"/>
+              </svg>
+            </div>
+            <p class="specialty-tag">Ages 6&ndash;12</p>
+            <h3>Child Therapy</h3>
+            <p>Play-based sessions for kids working through anxiety, big emotions, or a hard transition at home or school.</p>
+          </article>
+
+          <!-- Card 5: Teen / young adult -->
+          <article class="specialty-card reveal">
+            <div class="specialty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M14.5 9.5 13 13l-3.5 1.5L11 11l3.5-1.5Z"/>
+              </svg>
+            </div>
+            <p class="specialty-tag">Ages 13&ndash;19</p>
+            <h3>Teen &amp; Young Adult Support</h3>
+            <p>A steady, non-judgmental space for the identity, pressure, and family stuff that adult therapy doesn&rsquo;t always cover.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         APPROACH
+         Full-bleed section with a nature photo background + dark overlay so
+         the white text stays readable (contrast is checked, not assumed).
+         Numbered steps are appropriate HERE because the content genuinely IS
+         a sequence (see the frontend-design guidance on this).
+    ========================================================================= -->
+    <section class="approach" id="approach">
+      <div class="approach-bg" aria-hidden="true">
+        <img
+          src="https://images.unsplash.com/photo-1588406320565-9fa6d9901d1d?q=80&w=1600&auto=format&fit=crop"
+          alt=""
+          loading="lazy"
+        >
+      </div>
+
+      <div class="container approach-inner">
+
+        <div class="section-heading section-heading--on-dark reveal">
+          <p class="eyebrow">How we&rsquo;ll work together</p>
+          <h2>Three steps, no pressure</h2>
+        </div>
+
+        <ol class="approach-steps">
+          <li class="approach-step reveal">
+            <span class="approach-step-number">01</span>
+            <h3>Reach out</h3>
+            <p>Send a message or call. Tell me as much or as little as you want about what&rsquo;s going on.</p>
+          </li>
+          <li class="approach-step reveal">
+            <span class="approach-step-number">02</span>
+            <h3>Free 15-minute consultation</h3>
+            <p>A short call to talk about what you need and whether I&rsquo;m the right fit &mdash; no charge, no obligation.</p>
+          </li>
+          <li class="approach-step reveal">
+            <span class="approach-step-number">03</span>
+            <h3>First session</h3>
+            <p>We&rsquo;ll slow down, talk through what&rsquo;s been happening, and start building a plan that&rsquo;s actually yours.</p>
+          </li>
+        </ol>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         TESTIMONIALS — INFINITE MARQUEE
+         How it works: `.marquee-track` contains the cards ONCE in the markup,
+         then script.js clones that whole set and appends it right after —
+         so the track is visually doubled (12 cards instead of 6). The CSS
+         animation scrolls the doubled track exactly 50% to the left and loops;
+         because the second half is an identical copy of the first, the loop
+         point is invisible. Hovering (or focusing) the track pauses the CSS
+         animation — see `.marquee-track:hover` / `:focus-within` in styles.css.
+         Adjust speed by changing --marquee-duration in styles.css, not here.
+    ========================================================================= -->
+    <section class="testimonials" id="testimonials">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">From past clients</p>
+          <h2>What it&rsquo;s like to work together</h2>
+          <p class="section-lead">Shared with permission. Details changed to protect privacy.</p>
+        </div>
+      </div>
+
+      <!-- Full-bleed marquee viewport (outside .container so it can run edge-to-edge) -->
+      <div class="marquee" id="testimonialMarquee">
+        <div class="marquee-track" id="marqueeTrack">
+
+          <blockquote class="testimonial-card">
+            <div class="stars" aria-label="Rated 5 out of 5 stars">★★★★★</div>
+            <p>&ldquo;I&rsquo;d tried therapy before, but this was the first time someone actually explained why ERP works instead of just telling me to &lsquo;sit with the anxiety.&rsquo;&rdquo;</p>
+            <footer>Jenna R. <span>&middot; OCD therapy</span></footer>
+          </blockquote>
+
+          <blockquote class="testimonial-card">
+            <div class="stars" aria-label="Rated 5 out of 5 stars">★★★★★</div>
+            <p>&ldquo;My son actually looks forward to his sessions. That alone tells me we found the right person.&rdquo;</p>
+            <footer>Marcus T. <span>&middot; parent of a client, age 9</span></footer>
+          </blockquote>
+
+          <blockquote class="testimonial-card">
+            <div class="stars" aria-label="Rated 5 out of 5 stars">★★★★★</div>
+            <p>&ldquo;She never made me feel like my intrusive thoughts made me a bad person. That shift changed everything else.&rdquo;</p>
+            <footer>K. Alvarez</footer>
+          </blockquote>
+
+          <blockquote class="testimonial-card">
+            <div class="stars" aria-label="Rated 5 out of 5 stars">★★★★★</div>
+            <p>&ldquo;Twelve weeks in, I noticed I&rsquo;d gone a full week without a panic attack for the first time in two years.&rdquo;</p>
+            <footer>Priya D. <span>&middot; anxiety therapy</span></footer>
+          </blockquote>
+
+          <blockquote class="testimonial-card">
+            <div class="stars" aria-label="Rated 5 out of 5 stars">★★★★★</div>
+            <p>&ldquo;It&rsquo;s rare to find a therapist who&rsquo;s both this warm and this direct. I always leave with something concrete to work on.&rdquo;</p>
+            <footer>Daniel M.</footer>
+          </blockquote>
+
+          <blockquote class="testimonial-card">
+            <div class="stars" aria-label="Rated 5 out of 5 stars">★★★★★</div>
+            <p>&ldquo;As a teenager it&rsquo;s hard to trust an adult with this stuff. Sarah was the first one who didn&rsquo;t feel like she was managing me.&rdquo;</p>
+            <footer>Client, age 17</footer>
+          </blockquote>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         FAQ
+         Plain <details>/<summary> accordion — zero JavaScript needed, works
+         out of the box, and is trivially easy for a non-technical client to
+         edit (just duplicate a <details> block and change the text).
+    ========================================================================= -->
+    <section class="faq" id="faq">
+      <div class="container faq-inner">
+
+        <div class="section-heading reveal">
+          <p class="eyebrow">Good to know</p>
+          <h2>Frequently asked questions</h2>
+        </div>
+
+        <div class="faq-list reveal">
+
+          <details class="faq-item">
+            <summary>Do you accept insurance?</summary>
+            <p>I&rsquo;m private pay and not in-network with any insurance panels, which lets me keep caseloads small and sessions consistent. I provide a superbill you can submit to your insurer for possible out-of-network reimbursement &mdash; many PPO plans cover a portion.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do you offer online sessions?</summary>
+            <p>Yes. I see clients in-person in Dallas and via secure telehealth video anywhere in Texas, where I&rsquo;m licensed to practice.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What ages do you work with?</summary>
+            <p>Children age 6 and up, teens, and adults. Sessions with younger kids usually involve a parent for at least part of the intake.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How many sessions will I need?</summary>
+            <p>It depends on what you&rsquo;re working on &mdash; some anxiety and adjustment work moves in 8&ndash;12 sessions; OCD treatment with ERP is often longer. We&rsquo;ll talk about a rough timeline after the consultation call.</p>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         CONTACT
+         Two columns: practice info (left) + form (right). The form has TWO
+         states, toggled by JS: the visible <form> and a hidden `.form-success`
+         panel. See the big comment block in script.js for how the fake
+         "submitted" animation works and how to turn it off / wire up Formspree.
+    ========================================================================= -->
+    <section class="contact" id="contact">
+      <div class="container contact-inner">
+
+        <div class="contact-info reveal">
+          <p class="eyebrow">Get in touch</p>
+          <h2>Let&rsquo;s start with a conversation.</h2>
+          <p class="section-lead">
+            Fill out the form, or reach out directly &mdash; whichever feels
+            easier.
+          </p>
+
+          <dl class="contact-details">
+            <div>
+              <dt>Office</dt>
+              <dd>4514 Cole Ave, Suite 220<br>Dallas, TX 75205</dd>
+            </div>
+            <div>
+              <dt>Phone</dt>
+              <dd><a href="tel:+12145550142">(214) 555-0142</a></dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd><a href="mailto:hello@sarahwhitfieldcounseling.com">hello@sarahwhitfieldcounseling.com</a></dd>
+            </div>
+            <div>
+              <dt>Hours</dt>
+              <dd>Mon&ndash;Thu 9:00am&ndash;6:00pm<br>Fri 9:00am&ndash;2:00pm<br>Closed weekends</dd>
+            </div>
+          </dl>
+
+          <!--
+            MAP PLACEHOLDER
+            Swap this div for a real embedded Google Map <iframe> once you have
+            a confirmed office address. Keeping it a styled placeholder for now
+            so the layout is already correct — just replace the contents.
+          -->
+          <iframe
+            src="https://maps.google.com/maps?q=4514+Cole+Ave,+Suite+220,+Dallas,+TX+75205&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            width="100%"
+            height="100%"
+            style="border:0; border-radius: var(--radius-md);"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Map of 4514 Cole Ave, Suite 220, Dallas, TX 75205">
+          </iframe>
+
+          <!-- Crisis disclaimer. Real therapist sites should always include
+               something like this near the contact form. -->
+          <div class="crisis-note">
+            <strong>If this is a mental health emergency,</strong> please call
+            or text <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline)
+            or go to your nearest emergency room. This form is not monitored
+            24/7.
+          </div>
+        </div>
+
+        <div class="contact-form-wrap reveal">
+
+          <!--
+            CONTACT FORM
+            action/method point at Formspree. Right now, script.js intercepts
+            the submit event (DEMO_MODE flag) and shows a fake success panel
+            instead of actually posting anywhere. See script.js for the exact
+            two-line change needed to go live with Formspree.
+          -->
+          <form
+            id="contactForm"
+            class="contact-form"
+            action="https://formspree.io/f/YOUR_FORM_ID"
+            method="POST"
+            novalidate
+          >
+            <div class="form-row">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" autocomplete="name" required>
+            </div>
+
+            <div class="form-row form-row--split">
+              <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" autocomplete="email" required>
+              </div>
+              <div>
+                <label for="phone">Phone <span class="optional-tag">(optional)</span></label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label for="reason">What brings you here?</label>
+              <select id="reason" name="reason">
+                <option value="ocd">OCD &amp; intrusive thoughts</option>
+                <option value="anxiety">Anxiety</option>
+                <option value="depression">Depression</option>
+                <option value="child-teen">Child or teen therapy</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Send message</button>
+
+            <p class="form-fineprint">
+              This form isn&rsquo;t for emergencies (see the crisis note).
+              I typically respond within 1&ndash;2 business days.
+            </p>
+          </form>
+
+          <!--
+            SUCCESS PANEL (hidden by default via the `hidden` attribute).
+            script.js removes `hidden` and adds `.is-visible` on fake submit.
+            The checkmark circle animates its stroke via CSS — see
+            `.success-check` in styles.css, and DEMO_ANIMATION in script.js
+            for the on/off switch.
+          -->
+          <div class="form-success" id="formSuccess" hidden>
+            <svg class="success-check" viewBox="0 0 52 52" aria-hidden="true">
+              <circle class="success-check-circle" cx="26" cy="26" r="24" fill="none"/>
+              <path class="success-check-mark" fill="none" d="M14 27l7 7 16-16"/>
+            </svg>
+            <h3>Message sent</h3>
+            <p>Thanks for reaching out &mdash; I&rsquo;ll be in touch within 1&ndash;2 business days.</p>
+            <button type="button" class="btn btn-ghost" id="resetFormBtn">Send another message</button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+  =========================================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+
+      <div class="footer-brand">
+        <p class="footer-logo">Sarah Whitfield <span>Counseling</span></p>
+        <p class="footer-tagline">Individual therapy in Dallas, TX &amp; telehealth statewide.</p>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer">
+        <a href="#about">About</a>
+        <a href="#specialties">Specialties</a>
+        <a href="#approach">Approach</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="footer-legal">
+        <p>
+          Sarah Whitfield Counseling, PLLC is a private practice licensed in
+          the state of Texas. Information on this site is for general
+          purposes and isn&rsquo;t a substitute for individualized clinical
+          care. In a crisis, call or text 988.
+        </p>
+        <p>&copy; <span id="currentYear">2026</span> Sarah Whitfield Counseling, PLLC. All rights reserved.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       FLOATING CALL BUTTON
+       Fixed to the viewport, always accessible. Gets the LARGEST shadow on
+       the page (shadow hierarchy: the more "elevated" / interactive something
+       is, the bigger its shadow) plus a soft pulsing ring so it reads as
+       "live" without being obnoxious. Pulse respects prefers-reduced-motion
+       (see styles.css).
+  =========================================================================== -->
+  <a href="tel:+12145550142" class="floating-call" aria-label="Call Sarah Whitfield Counseling at (214) 555-0142">
+    <span class="floating-call-pulse" aria-hidden="true"></span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 2 .7 3a2 2 0 0 1-.4 2.1L8 10.3a16 16 0 0 0 6 6l1.5-1.4a2 2 0 0 1 2.1-.4c1 .4 2 .6 3 .7a2 2 0 0 1 1.7 2Z"/>
+    </svg>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
